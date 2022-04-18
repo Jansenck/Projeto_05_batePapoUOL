@@ -36,7 +36,13 @@ main section .message{
 
     display: flex;
     justify-content: left;
-    background-color: #e5e5e5;
+    background-color: #ffffff;
+}
+main section .private-message{
+    background-color: #ffdede;
+}
+main section .status{
+    background-color: #dcdcdc;
 }
 
 main section p{
