@@ -27,6 +27,14 @@ function refreshConection(refreshUser){
 
     promisseRefresh.then(resetMessages);
 
+    setInterval(refreshConectionLoop, 5000);
+
+}
+
+function refreshConectionLoop(){
+    const objectName = {name: userName};
+
+    let promisseRefresh = axios.post("https://mock-api.driven.com.br/api/v6/uol/status", objectName);
 }
 
 function resetMessages(request){
@@ -86,13 +94,39 @@ function includeMessages(messages){
         }
         
     }
-
-    // setTimeout(resetMessages, 3000);
-
+    
+    scrollMessages();
 }
-function scrollMessages(){
-    const chat = document.querySelector(".message");
-    // const messages = document.querySelector(".message");
 
-    message.scrollIntoView({behavior: "end", behavior: "smooth"});
+function scrollMessages(){
+    const chat = document.querySelector(".chat");
+    chat.scrollIntoView(false);
+    
+    setTimeout(resetMessages, 3000);
+}
+
+function sendMessage(){
+
+    console.log("ENTREI EM SEND");
+    let messageInput = document.querySelector("input").value;
+
+    const objectMessage = {
+        from: `${userName}`,
+        to: "Todos",
+        text: `${messageInput}`,
+        type: `${"message"}`
+    };
+
+    const promisseSendMessage = axios.post("https://mock-api.driven.com.br/api/v6/uol/messages", objectMessage);
+
+    promisseSendMessage.then(function sendUserMessages(messages){
+    
+        const promisseMessages = axios.get("https://mock-api.driven.com.br/api/v6/uol/messages");  
+       
+    });
+    
+    promisseSendMessage.catch(function (response){
+        alert("Erro ao enviar a messagem. Por favor, reinicie a página!")
+    });
+
 }

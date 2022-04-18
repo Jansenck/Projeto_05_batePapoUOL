@@ -37,17 +37,21 @@ main section .message{
     display: flex;
     justify-content: left;
     background-color: #ffffff;
+
+    transition: scrollIntoView 3s linear;
 }
+
 main section .private-message{
     background-color: #ffdede;
 }
 main section .status{
     background-color: #dcdcdc;
 }
-
 main section p{
     display: contents;
 }
+
+
 
 footer{
     height: 80px;
