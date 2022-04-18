@@ -1,3 +1,4 @@
+
 let userName;
 
 function includeUser(){
@@ -130,7 +131,7 @@ function sendMessage(){
 
     const objectMessage = {
         from: `${userName}`,
-        to: "Todos",
+        to: `${"Todos"}`,
         text: `${messageInput}`,
         type: `${"message"}`
     };
@@ -145,6 +146,8 @@ function sendMessage(){
     
     promisseSendMessage.catch(function (response){
         alert("Erro ao enviar a messagem. Por favor, reinicie a página!")
+        window.location.reload(true);
+
     });
 
     getMessages();
