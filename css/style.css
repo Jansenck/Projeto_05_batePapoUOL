@@ -51,7 +51,13 @@ main section p{
     display: contents;
 }
 
-
+main section .message-time{
+    color: #aaaaaa;
+    margin: 0 5px;
+}
+main section b{
+    margin: 0 5px;
+}
 
 footer{
     height: 80px;

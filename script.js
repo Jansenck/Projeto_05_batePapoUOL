@@ -9,7 +9,7 @@ function includeUser(){
 
     promisseRefresh.then(refreshConection);
 
-    promisseRefresh.catch(function (error) {
+    promisseRefresh.catch(function () {
 
         alert("Este nome de usuário já existe. Por favor, digite um nome de usuário válido.");
 
@@ -17,7 +17,10 @@ function includeUser(){
     });
 
 }
+
 includeUser();
+
+setTimeout(getMessages, 3000);
 
 function refreshConection(refreshUser){
 
@@ -25,71 +28,88 @@ function refreshConection(refreshUser){
 
     let promisseRefresh = axios.post("https://mock-api.driven.com.br/api/v6/uol/status", objectName);
 
-    promisseRefresh.then(resetMessages);
+    promisseRefresh.then(getMessages);
 
     setInterval(refreshConectionLoop, 5000);
 
 }
 
 function refreshConectionLoop(){
-    const objectName = {name: userName};
 
-    let promisseRefresh = axios.post("https://mock-api.driven.com.br/api/v6/uol/status", objectName);
-}
+    const objectNameLoop = {name: userName};
 
-function resetMessages(request){
+    let promisseRefreshLoop = axios.post("https://mock-api.driven.com.br/api/v6/uol/status", objectNameLoop);
 
-    let includeDataMessages = document.querySelector(".chat");
-    includeDataMessages.innerHTML = "";
-
-    getMessages();
 }
 
 function getMessages(messages){
     
     const promisseMessages = axios.get("https://mock-api.driven.com.br/api/v6/uol/messages");  
-    promisseMessages.then(includeMessages);
+
+    promisseMessages.then(filterNewMessages);
    
 }
 
+let updatedMessages = [];
+
+function filterNewMessages(messages){
+
+    let oldMessages = messages.data;
+
+    for(let i = 0; i < oldMessages.length; i++){
+
+        if(!updatedMessages.includes(oldMessages[i])){
+
+            updatedMessages.push(oldMessages[i]);
+        }
+    }
+ 
+    includeMessages(updatedMessages);
+    
+}
 
 function includeMessages(messages){
 
     let includeDataMessages = document.querySelector(".chat");
 
-    for(let i = 0; i < messages.data.length; i++){
+    for(let i = 0; i < messages.length; i++){
         
-        if(messages.data[i].type == "message"){
+        if(messages[i].type == "message"){
 
             includeDataMessages.innerHTML += `
     
             <div class="message">
-                <p>${messages.data[i].time} ${ messages.data[i].from} para ${messages.data[i].to}: ${ messages.data[i].text}</p>
+                <p><span class="message-time">${ messages[i].time}</span> <b>${ messages[i].from}</b> para <b>${ messages[i].to}</b>: ${ messages[i].text}</p>
             </div>
             
             `;
             
-        } else if(messages.data[i].type == "status"){
+        } else if(messages[i].type == "status"){
             
             
             includeDataMessages.innerHTML += `
             
             <div class="message status">
-            <p>${messages.data[i].time} ${ messages.data[i].from} ${ messages.data[i].text}</p>
+            <p><span class="message-time">${ messages[i].time}</span> <b>${ messages[i].from}</b> ${ messages[i].text}</p>
             </div>
             
             `;
             
-        } else if (messages.data[i].type == "private_message"){
+        }
+        if (messages[i].type == "private_message"){
+            
+            if (messages[i].to == `${userName}`){
             
             
-            includeDataMessages.innerHTML += `
-            
-            <div class="message private-message">
-            <p>${messages.data[i].time} ${ messages.data[i].from} reservadamente para ${messages.data[i].to}: ${ messages.data[i].text}</p>
-            </div>
-            
-            `;
+                includeDataMessages.innerHTML += `
+                
+                <div class="message private-message">
+                <p><span class="message-time">${ messages[i].time}</span> <b>${ messages[i].from}</b> reservadamente para <b>${ messages[i].from}</b>: ${ messages[i].text}</p>
+                </div>
+                
+                `;
+    
+            }
 
         }
         
@@ -102,12 +122,10 @@ function scrollMessages(){
     const chat = document.querySelector(".chat");
     chat.scrollIntoView(false);
     
-    setTimeout(resetMessages, 3000);
 }
 
 function sendMessage(){
 
-    console.log("ENTREI EM SEND");
     let messageInput = document.querySelector("input").value;
 
     const objectMessage = {
@@ -129,4 +147,5 @@ function sendMessage(){
         alert("Erro ao enviar a messagem. Por favor, reinicie a página!")
     });
 
+    getMessages();
 }
