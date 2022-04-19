@@ -1,5 +1,12 @@
 body{
+
+    font-family: 'Roboto', sans-serif;
+    font-size: 14px;
+    font-weight: 400;
     background-color: #f3f3f3;
+    
+    overflow-x: hidden;
+    scrollbar-width: 0px;
 }
 
 header{
@@ -27,7 +34,7 @@ main section{
 }
 
 main section .message{
-    /* height: 35px; */
+
     width: 100%;
     
     padding: 10px 5px;
@@ -38,7 +45,6 @@ main section .message{
     justify-content: left;
     background-color: #ffffff;
 
-    transition: scrollIntoView 3s linear;
 }
 
 main section .private-message{
@@ -48,15 +54,21 @@ main section .status{
     background-color: #dcdcdc;
 }
 main section p{
-    display: contents;
+    display: inline;
+    word-break:break-word;
+}
+main section b{
+    font-weight: 700;
 }
 
 main section .message-time{
     color: #aaaaaa;
     margin: 0 5px;
+    word-break: keep-all;
 }
 main section b{
     margin: 0 5px;
+    word-break: keep-all;
 }
 
 footer{
@@ -92,6 +104,6 @@ input:focus::placeholder{
 
 footer ion-icon{
     font-size: 30px;
-    padding: 0 15px;
+    padding-left: 15px;
     box-sizing: border-box;
 }

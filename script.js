@@ -21,7 +21,7 @@ function includeUser(){
 
 includeUser();
 
-setTimeout(getMessages, 3000);
+// setInterval(getMessages, 3000);
 
 function refreshConection(refreshUser){
 
@@ -29,7 +29,7 @@ function refreshConection(refreshUser){
 
     let promisseRefresh = axios.post("https://mock-api.driven.com.br/api/v6/uol/status", objectName);
 
-    promisseRefresh.then(getMessages);
+    promisseRefresh.then(setInterval(getMessages, 3000));
 
     setInterval(refreshConectionLoop, 5000);
 
@@ -44,7 +44,7 @@ function refreshConectionLoop(){
 }
 
 function getMessages(messages){
-    
+    console.log("entrei em get");
     const promisseMessages = axios.get("https://mock-api.driven.com.br/api/v6/uol/messages");  
 
     promisseMessages.then(filterNewMessages);
@@ -54,6 +54,9 @@ function getMessages(messages){
 let updatedMessages = [];
 
 function filterNewMessages(messages){
+    console.log("entrei em filter");
+    updatedMessages = [];
+    console.log(updatedMessages)
 
     let oldMessages = messages.data;
 
@@ -70,7 +73,7 @@ function filterNewMessages(messages){
 }
 
 function includeMessages(messages){
-
+    console.log(messages.length);
     let includeDataMessages = document.querySelector(".chat");
 
     for(let i = 0; i < messages.length; i++){
@@ -80,7 +83,7 @@ function includeMessages(messages){
             includeDataMessages.innerHTML += `
     
             <div class="message">
-                <p><span class="message-time">${ messages[i].time}</span> <b>${ messages[i].from}</b> para <b>${ messages[i].to}</b>: ${ messages[i].text}</p>
+                <p><span class="message-time">(${ messages[i].time})</span> <b>${ messages[i].from}</b> para <b>${ messages[i].to}</b>: ${ messages[i].text}</p>
             </div>
             
             `;
@@ -91,7 +94,7 @@ function includeMessages(messages){
             includeDataMessages.innerHTML += `
             
             <div class="message status">
-            <p><span class="message-time">${ messages[i].time}</span> <b>${ messages[i].from}</b> ${ messages[i].text}</p>
+            <p><span class="message-time">(${ messages[i].time})</span> <b>${ messages[i].from}</b> ${ messages[i].text}</p>
             </div>
             
             `;
@@ -105,7 +108,7 @@ function includeMessages(messages){
                 includeDataMessages.innerHTML += `
                 
                 <div class="message private-message">
-                <p><span class="message-time">${ messages[i].time}</span> <b>${ messages[i].from}</b> reservadamente para <b>${ messages[i].from}</b>: ${ messages[i].text}</p>
+                <p><span class="message-time">(${ messages[i].time})</span> <b>${ messages[i].from}</b> reservadamente para <b>${ messages[i].from}</b>: ${ messages[i].text}</p>
                 </div>
                 
                 `;
@@ -115,7 +118,6 @@ function includeMessages(messages){
         }
         
     }
-    
     scrollMessages();
 }
 
@@ -126,6 +128,7 @@ function scrollMessages(){
 }
 
 function sendMessage(){
+    console.log("entrei em send");
 
     let messageInput = document.querySelector("input").value;
 
@@ -146,7 +149,7 @@ function sendMessage(){
     
     promisseSendMessage.catch(function (response){
         alert("Erro ao enviar a messagem. Por favor, reinicie a página!")
-        window.location.reload(true);
+        // window.location.reload(true);
 
     });
 
